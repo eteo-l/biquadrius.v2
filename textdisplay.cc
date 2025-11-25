@@ -2,7 +2,7 @@ export module TextDisplay;
 
 import <string>;
 import <vector>;
-import Observer;
+import Abstract;
 import Player;
 import Types;
 

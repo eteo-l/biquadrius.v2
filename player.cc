@@ -5,6 +5,7 @@ import Board;
 import Block;
 import Level;
 import Score;
+import Types;
 
 export class Player {
     Board board;
