@@ -10,12 +10,18 @@ char Block::getChar() const { return blockTypeToChar(type); }
 int Block::getLevelCreated() const { return levelCreated; }
 const std::vector<Point>& Block::getOffsets() const { return offsets; }
 
+// Mike
+// int Block::minimum(int x, int y) {
+//     if (x <= y) return x;
+//     return y;
+// }
+
 // helper: normalize so lower-left of bounding box is at (0,0)
 static void normalize(std::vector<Point> &pts) {
     int minR = pts[0].r;
     int minC = pts[0].c;
     for (auto &p : pts) {
-        // minR = (minR <= minC ? minR : p.r);
+        // minR = (minR <= minC ? minR : p.r); DOES NOT WORK
         // minC = (minC <= p.c ? minC : p.c);
         minR = std::min(minR, p.r);
         minC = std::min(minC, p.c);
@@ -52,8 +58,6 @@ std::unique_ptr<Block> makeBlock(BlockType t, int lvl) {
     // initial blcoks based on :contentReference[oaicite:3]{index=3}
     
     // Mike new
-    // INTIAL BLOCKS ARE WRONG!
-    // THEY SHOULD APPEAR LIKE IN THE PDF
     if (t == BlockType::I) {
         return std::make_unique<Block>(t, std::vector<Point>{{0,0},{0,1},{0,2},{0,3}}, lvl);
     } else if (t == BlockType::J) {
@@ -68,29 +72,7 @@ std::unique_ptr<Block> makeBlock(BlockType t, int lvl) {
         return std::make_unique<Block>(t, std::vector<Point>{{0,0},{0,1},{1,1},{1,2}}, lvl);
     } else if (t == BlockType::T) {
         return std::make_unique<Block>(t, std::vector<Point>{{0,0},{0,1},{0,2},{1,1}}, lvl);
-    } else if (t == BlockType::Star) {
+    } else {
         return std::make_unique<Block>(t, std::vector<Point>{{0,0}}, lvl);
     }
-
-    return std::make_unique<Block>(BlockType::I, std::vector<Point>{{0,0},{1,0},{2,0},{3,0}}, lvl);
-    // OLD
-    // switch (t) {
-    //     case BlockType::I:
-    //         return std::make_unique<Block>(t, std::vector<Point>{{0,0},{1,0},{2,0},{3,0}}, lvl);
-    //     case BlockType::J:
-    //         return std::make_unique<Block>(t, std::vector<Point>{{0,0},{0,1},{1,1},{2,1}}, lvl);
-    //     case BlockType::L:
-    //         return std::make_unique<Block>(t, std::vector<Point>{{2,0},{0,1},{1,1},{2,1}}, lvl);
-    //     case BlockType::O:
-    //         return std::make_unique<Block>(t, std::vector<Point>{{0,0},{1,0},{0,1},{1,1}}, lvl);
-    //     case BlockType::S:
-    //         return std::make_unique<Block>(t, std::vector<Point>{{1,0},{2,0},{0,1},{1,1}}, lvl);
-    //     case BlockType::Z:
-    //         return std::make_unique<Block>(t, std::vector<Point>{{0,0},{1,0},{1,1},{2,1}}, lvl);
-    //     case BlockType::T:
-    //         return std::make_unique<Block>(t, std::vector<Point>{{0,0},{1,0},{2,0},{1,1}}, lvl);
-    //     case BlockType::Star:
-    //         return std::make_unique<Block>(t, std::vector<Point>{{0,0}}, lvl);
-    // }
-    // return std::make_unique<Block>(BlockType::I, std::vector<Point>{{0,0},{1,0},{2,0},{3,0}}, lvl);
 }

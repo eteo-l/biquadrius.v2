@@ -48,6 +48,11 @@ void Player::moveRight() {
 void Player::moveDown() {
     if (board.canMove(*current, curR, curC, +1, 0)) curR++;
 }
+void Player::moveUp() {
+    if (board.canMove(*current, curR, curC, -1, 0)) curR--;
+}
+
+
 
 void Player::rotateCW() {
     auto backup = current->getOffsets();

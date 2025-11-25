@@ -3,9 +3,12 @@ module Board;
 Board::Board() : grid(Rows, std::vector<char>(Cols, ' ')) {}
 
 void Board::reset() {
-    for (auto &row : grid)
-        for (auto &cell : row)
+    for (auto &row : grid) {
+        for (auto &cell : row) {
             cell = ' ';
+        }
+    }
+    // render
     notify();
 }
 
@@ -15,7 +18,10 @@ bool Board::canPlace(const Block &b, int baseR, int baseC) const {
     for (auto &off : b.getOffsets()) {
         int r = baseR + off.r;
         int c = baseC + off.c;
-        if (r < 0 || r >= Rows || c < 0 || c >= Cols) return false;
+
+        // since we are defining the board as including the score and hi score
+        // prevent blocks from moving into rows 0-3 (only 3-18 which is 15 rows total)
+        if (r < 3 || r >= Rows || c < 0 || c >= Cols) return false;
         if (grid[r][c] != ' ') return false;
     }
     return true;
@@ -27,9 +33,10 @@ void Board::place(const Block &b, int baseR, int baseC) {
         int c = baseC + off.c;
         grid[r][c] = b.getChar();
     }
+    // re-render the board
     notify();
 }
-
+ 
 bool Board::canMove(const Block &b, int baseR, int baseC, int dr, int dc) const {
     return canPlace(b, baseR + dr, baseC + dc);
 }

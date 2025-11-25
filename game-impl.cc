@@ -30,6 +30,7 @@ void Game::run() {
                     case CommandType::Left: active->moveLeft(); break;
                     case CommandType::Right: active->moveRight(); break;
                     case CommandType::Down: active->moveDown(); break;
+                    case CommandType::Up: active->moveUp(); break;
                     case CommandType::CW: active->rotateCW(); break;
                     case CommandType::CCW: active->rotateCCW(); break;
                     case CommandType::LevelUp: active->levelUp(); break;
@@ -41,10 +42,17 @@ void Game::run() {
                         break;
                     case CommandType::Drop: {
                         active->drop();
-                        turn = 1 - turn; // switch player turn after drop :contentReference[oaicite:8]{index=8}
+                        // switch player turn after drop
+                        turn = 1 - turn;
                         active = (turn == 0 ? &p1 : &p2);
-                        if (!active->spawnNext()) {
-                            // if nextblock cant spawn in top left game is over
+                        // Dont call spawnNext() for the player whose turn is starting
+                        // only the player who dropped should get a new block (spawnNext
+                        // is already called inside Player::drop()). Instead, check if
+                        // the next players current block can be placed at their spawn
+                        // position; if not, the game is over.
+                        if (!active->getBoard().canPlace(active->getCurrentBlock(),
+                                                         active->getCurR(),
+                                                         active->getCurC())) {
                             std::cout << "Game Over! Player " << (1-turn) << " wins" << std::endl;
                             gameOver = true;
                         }
