@@ -3,20 +3,20 @@ export module Abstract;
 import <vector>;
 import <algorithm>;
 
-// Forward declarations inside the SAME module.
+// forward declarations inside same module
 export class Subject;
 export class Observer;
 
-// Observer interface
+// observer interface
 export class Observer {
 public:
     virtual void update(Subject &whoNotified) = 0;
     virtual ~Observer() = default;
 };
 
-// Subject base
+// subject base
 export class Subject {
-    std::vector<Observer*> observers; // non-owning
+    std::vector<Observer*> observers; // does not own?
 public:
     void attach(Observer *o);
     void detach(Observer *o);

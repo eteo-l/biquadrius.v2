@@ -35,13 +35,17 @@ void Game::run() {
                     case CommandType::LevelUp: active->levelUp(); break;
                     case CommandType::LevelDown: active->levelDown(); break;
                     case CommandType::Restart:
-                        p1.reset(); p2.reset(); turn = 0; break;
+                        p1.reset(); 
+                        p2.reset(); 
+                        turn = 0; 
+                        break;
                     case CommandType::Drop: {
                         active->drop();
                         turn = 1 - turn; // switch player turn after drop :contentReference[oaicite:8]{index=8}
                         active = (turn == 0 ? &p1 : &p2);
                         if (!active->spawnNext()) {
-                            std::cout << "Game Over! Player " << (1-turn) << " wins.\n";
+                            // if nextblock cant spawn in top left game is over
+                            std::cout << "Game Over! Player " << (1-turn) << " wins" << std::endl;
                             gameOver = true;
                         }
                         break;

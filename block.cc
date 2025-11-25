@@ -7,7 +7,7 @@ import Types;
 export class Block {
 protected:
     BlockType type;
-    std::vector<Point> offsets; // 4 cells relative to origin
+    std::vector<Point> offsets; // 4 cells relative to origin (0,0)
     int levelCreated;
 
 public:
@@ -18,8 +18,9 @@ public:
     char getChar() const;
     int getLevelCreated() const;
     const std::vector<Point>& getOffsets() const;
+    // int minimum(int x, int y);
 
-    // Rotation changes offsets only (board checks legality)
+    // rotation changes offsets only (board checks legality)
     virtual void rotateCW();
     virtual void rotateCCW();
 };

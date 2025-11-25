@@ -9,7 +9,7 @@ export struct Point {
     int c;
 };
 
-export enum class BlockType { I, J, L, O, S, Z, T, Star };
+export enum class BlockType { I, J, L, O, S, Z, T, Star};
 
 export enum class CommandType {
     Left, Right, Down, Drop,

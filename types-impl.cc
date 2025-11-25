@@ -1,5 +1,7 @@
 module Types;
 
+// REMOVE SWTICH STATEMENTS
+
 BlockType charToBlockType(char ch) {
     switch (ch) {
         case 'I': return BlockType::I;
