@@ -11,6 +11,7 @@ Player::Player(int startLevel)
     : level{makeLevel(startLevel)} {
     current = level->createBlock();
     next = level->createBlock();
+    curR = 3 - current->getMaxRelRow();
 }
 
 Board& Player::getBoard() { return board; }
@@ -31,11 +32,13 @@ int Player::getLevelNum() const { return level->getLevelNum(); }
 const Score& Player::getScore() const { return score; }
 int Player::getCurR() const { return curR; }
 int Player::getCurC() const { return curC; }
+void Player::setCurR(int r) { curR = r; }
 
 bool Player::spawnNext() {
     current = std::move(next);
     next = level->createBlock();
-    curR = 3; curC = 0;
+    curR = 3 - current->getMaxRelRow(); curC = 0;
+    // check if current block fits if its bottom row is occupying the row below the reserve rows
     return board.canPlace(*current, curR, curC);
 }
 
@@ -51,8 +54,6 @@ void Player::moveDown() {
 void Player::moveUp() {
     if (board.canMove(*current, curR, curC, -1, 0)) curR--;
 }
-
-
 
 void Player::rotateCW() {
     auto backup = current->getOffsets();

@@ -23,6 +23,8 @@ public:
     // rotation changes offsets only (board checks legality)
     virtual void rotateCW();
     virtual void rotateCCW();
+
+    int getMaxRelRow() const;
 };
 
 export std::unique_ptr<Block> makeBlock(BlockType t, int levelCreated);

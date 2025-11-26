@@ -15,6 +15,9 @@ Game::Game(int startLevel)
 void Game::run() {
     std::string line;
 
+    std::cout << "Welcome to Biquadris!" << std::endl;
+    td.render();
+
     while (!gameOver && std::getline(std::cin, line)) {
         auto [mult, cmd, forced] = parser.parse(line);
 
@@ -42,9 +45,7 @@ void Game::run() {
                         break;
                     case CommandType::Drop: {
                         active->drop();
-                        // switch player turn after drop
-                        turn = 1 - turn;
-                        active = (turn == 0 ? &p1 : &p2);
+                        
                         // Dont call spawnNext() for the player whose turn is starting
                         // only the player who dropped should get a new block (spawnNext
                         // is already called inside Player::drop()). Instead, check if
@@ -53,9 +54,15 @@ void Game::run() {
                         if (!active->getBoard().canPlace(active->getCurrentBlock(),
                                                          active->getCurR(),
                                                          active->getCurC())) {
-                            std::cout << "Game Over! Player " << (1-turn) << " wins" << std::endl;
+                            
+                            active->setCurR(-1); // set to -1 to indicate that the current block cannot fit
                             gameOver = true;
-                        }
+                        } 
+                        
+                        // switch player turn after drop
+                        turn = 1 - turn;
+                        active = (turn == 0 ? &p1 : &p2);
+                        
                         break;
                     }
                     default: break;
@@ -66,5 +73,9 @@ void Game::run() {
         p1.getBoard().notify();
         p2.getBoard().notify();
         td.render();
+
+        if (gameOver) {
+            std::cout << "Game Over! Player " << (1-turn) << " wins" << std::endl;
+        }
     }
 }

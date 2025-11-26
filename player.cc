@@ -15,7 +15,7 @@ export class Player {
     std::unique_ptr<Block> current;
     std::unique_ptr<Block> next;
 
-    int curR = 3;
+    int curR = 3; // if curR == -1 then indicates game over
     int curC = 0;
 
 public:
@@ -32,6 +32,9 @@ public:
     const Score& getScore() const;
     int getCurR() const;
     int getCurC() const;
+
+    // Mutator to indicate block doesn't fit when game over
+    void setCurR(int r);
 
     bool spawnNext(); // returns false if cannot spawn => lose
 

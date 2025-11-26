@@ -54,6 +54,15 @@ void Block::rotateCCW() {
     normalize(offsets);
 }
 
+// Lorena new
+int Block::getMaxRelRow() const {
+    int maxR = offsets[0].r;
+    for (auto &p : offsets) {
+        maxR = std::max(maxR, p.r);
+    }
+    return maxR;
+}
+
 std::unique_ptr<Block> makeBlock(BlockType t, int lvl) {
     // initial blcoks based on :contentReference[oaicite:3]{index=3}
     

@@ -19,9 +19,7 @@ bool Board::canPlace(const Block &b, int baseR, int baseC) const {
         int r = baseR + off.r;
         int c = baseC + off.c;
 
-        // since we are defining the board as including the score and hi score
-        // prevent blocks from moving into rows 0-3 (only 3-18 which is 15 rows total)
-        if (r < 3 || r >= Rows || c < 0 || c >= Cols) return false;
+        if (r < 0 || r >= Rows || c < 0 || c >= Cols) return false; // Lorena edited, changed r < 3 to r < 0
         if (grid[r][c] != ' ') return false;
     }
     return true;
@@ -63,6 +61,7 @@ int Board::clearFullRows() {
 
 std::vector<std::vector<char>> Board::renderWithCurrent(const Block &b, int baseR, int baseC) const {
     auto tmp = grid;
+    if (baseR == -1) return tmp; // if game over, just return the grid
     for (auto &off : b.getOffsets()) {
         int r = baseR + off.r;
         int c = baseC + off.c;
