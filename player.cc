@@ -23,7 +23,7 @@ public:
 
     void reset();
 
-    // Accessors for display
+    // getters for display
     Board& getBoard();
     const Board& getBoard() const;
     const Block& getCurrentBlock() const;
@@ -33,22 +33,24 @@ public:
     int getCurR() const;
     int getCurC() const;
 
-    // Mutator to indicate block doesn't fit when game over
+    // setter to indicate block does not fit when game over
     void setCurR(int r);
 
-    bool spawnNext(); // returns false if cannot spawn => lose
+    // returns false if cannot spawn => lose
+    bool spawnNext(); 
 
-    // actions
+    // move rotate drop leves
     void moveLeft();
     void moveRight();
     void moveDown();
     void rotateCW();
     void rotateCCW();
-    int drop(); // returns lines cleared
-
+    int drop();         // returns num of lines cleared
     void levelUp();
     void levelDown();
 
+
+    // REMOVE???
     // for testing replacement later (I/J/L commands)
     void forceBlock(BlockType t);
 };

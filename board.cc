@@ -12,7 +12,7 @@ public:
     static constexpr int Cols = 11;
 
 private:
-    std::vector<std::vector<char>> grid; // ' ' empty
+    std::vector<std::vector<char>> grid; // starts with ' ' (as empty then '.' looks nicer)
 
     int originR = 3; // spawn row (after reserve)
     int originC = 0; // spawn col

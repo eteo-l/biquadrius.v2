@@ -10,7 +10,7 @@ export class Game {
     TextDisplay td;
     CommandInterpreter parser;
 
-    int turn = 0; // 0 => p1, 1 => p2
+    int turn = 0; // starts with p1 by definition
     bool gameOver = false;
 
 public:

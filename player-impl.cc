@@ -7,8 +7,8 @@ import Level;
 import Board;
 import Score; 
 
-Player::Player(int startLevel)
-    : level{makeLevel(startLevel)} {
+Player::Player(int startLevel):
+    level{makeLevel(startLevel)} {
     current = level->createBlock();
     next = level->createBlock();
     curR = 3 - current->getMaxRelRow();

@@ -1,6 +1,6 @@
 module Types;
 
-// REMOVE SWTICH STATEMENTS
+// REMOVE SWTICH STATEMENTS !!!
 
 BlockType charToBlockType(char ch) {
     switch (ch) {
