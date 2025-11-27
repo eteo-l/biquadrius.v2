@@ -19,6 +19,7 @@ OBJS = \
 all: sysheaders $(TARGET)
 
 sysheaders:
+	$(CXX) $(CXXFLAGS) -c -x c++-system-header fstream
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header sstream
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header iostream
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header ostream

@@ -1,6 +1,7 @@
 export module Player;
 
 import <memory>;
+import <vector>;
 import Board;
 import Block;
 import Level;
@@ -19,7 +20,9 @@ export class Player {
     int curC = 0;
 
 public:
-    Player(int startLevel = 0);
+    Player(int startLevel = 0, const std::vector<BlockType> *level0Seq = nullptr);
+    // Player(int startLevel = 0);
+
 
     void reset();
 

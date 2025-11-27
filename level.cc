@@ -1,7 +1,9 @@
 export module Level;
 
 import <memory>;
+import <vector>;
 import Block;
+import Types;
 
 export class Level {
 protected:
@@ -12,10 +14,13 @@ public:
 
     int getLevelNum() const;
 
-    // Factory Method pattern:
+    // block factory
     virtual std::unique_ptr<Block> createBlock() = 0;
 
-    virtual bool isHeavy() const { return false; }
+    // use later?
+    // virtual bool isHeavy() const;
 };
+
+export std::unique_ptr<Level> makeLevel0(const std::vector<BlockType> &sequence);
 
 export std::unique_ptr<Level> makeLevel(int n);

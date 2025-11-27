@@ -7,8 +7,15 @@ import Level;
 import Board;
 import Score; 
 
-Player::Player(int startLevel):
-    level{makeLevel(startLevel)} {
+// mike new overloaded player ctor
+Player::Player(int startLevel, const std::vector<BlockType> *level0Seq)
+{
+    if (startLevel == 0 && level0Seq) {
+        level = makeLevel0(*level0Seq);
+    } else {
+        level = makeLevel(startLevel);
+    }
+
     current = level->createBlock();
     next = level->createBlock();
     curR = 3 - current->getMaxRelRow();
@@ -102,11 +109,21 @@ int Player::drop() {
 
 void Player::levelUp() {
     int n = level->getLevelNum();
-    level = makeLevel(n + 1);
+    n++;
+    if (n == 4) n = 3;
+    level = makeLevel(n);
 }
 void Player::levelDown() {
     int n = level->getLevelNum();
     level = makeLevel(n - 1);
+    // n--;
+    // if (n <= 0) {
+    //     n = 0;
+    //     // need the sequence here!
+    //     level = makeLevel0(const std::vector<BlockType> &sequence);
+    //     return;
+    // }
+    // level = makeLevel(n);
 }
 
 void Player::forceBlock(BlockType t) {

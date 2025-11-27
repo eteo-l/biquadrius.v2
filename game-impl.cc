@@ -6,8 +6,9 @@ import Types;
 
 using namespace std;
 
-Game::Game(int startLevel): 
-    p1{startLevel}, p2{startLevel}, td{&p1, &p2} {
+Game::Game(int startLevel, const std::vector<BlockType> *seq1, const std::vector<BlockType> *seq2): 
+p1{startLevel, seq1}, p2{startLevel, seq2}, td{&p1, &p2} 
+{
     p1.getBoard().attach(&td);
     p2.getBoard().attach(&td);
     p1.getBoard().notify();
