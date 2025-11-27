@@ -8,6 +8,10 @@ import Block;
 
 export class Board : public Subject {
 public:
+    //bruh remove ts
+    // const int should be fine lowk
+    // and if anything move this down to other public section
+    // two public sections look weird
     static constexpr int Rows = 18;
     static constexpr int Cols = 11;
 

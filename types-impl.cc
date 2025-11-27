@@ -1,31 +1,63 @@
 module Types;
 
-// REMOVE SWTICH STATEMENTS !!!
-
 BlockType charToBlockType(char ch) {
-    switch (ch) {
-        case 'I': return BlockType::I;
-        case 'J': return BlockType::J;
-        case 'L': return BlockType::L;
-        case 'O': return BlockType::O;
-        case 'S': return BlockType::S;
-        case 'Z': return BlockType::Z;
-        case 'T': return BlockType::T;
-        case '*': return BlockType::Star;
-        default:  return BlockType::I;
+    if (ch == 'I') {
+        return BlockType::I;
+    }
+    else if (ch == 'J') {
+        return BlockType::J;
+    }
+    else if (ch == 'L') {
+        return BlockType::L;
+    }
+    else if (ch == 'O') {
+        return BlockType::O;
+    }
+    else if (ch == 'S') {
+        return BlockType::S;
+    }
+    else if (ch == 'Z') {
+        return BlockType::Z;
+    }
+    else if (ch == 'T') {
+        return BlockType::T;
+    }
+    else if (ch == '*') {
+        return BlockType::Star;
+    }
+    else {
+        return BlockType::I; // default to I block (by MY definition)
     }
 }
 
 char blockTypeToChar(BlockType t) {
-    switch (t) {
-        case BlockType::I: return 'I';
-        case BlockType::J: return 'J';
-        case BlockType::L: return 'L';
-        case BlockType::O: return 'O';
-        case BlockType::S: return 'S';
-        case BlockType::Z: return 'Z';
-        case BlockType::T: return 'T';
-        case BlockType::Star: return '*';
+    if (t == BlockType::I) {
+        return 'I';
     }
-    return '?';
+    else if (t == BlockType::J) {
+        return 'J';
+    }
+    else if (t == BlockType::L) {
+        return 'L';
+    }
+    else if (t == BlockType::O) {
+        return 'O';
+    }
+    else if (t == BlockType::S) {
+        return 'S';
+    }
+    else if (t == BlockType::Z) {
+        return 'Z';
+    }
+    else if (t == BlockType::T) {
+        return 'T';
+    }
+    else if (t == BlockType::Star) {
+        return '*';
+    }
+    else {
+        return '?'; 
+        // should never happen
+        // added to remove warnings
+    }
 }

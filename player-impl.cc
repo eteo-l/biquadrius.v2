@@ -14,7 +14,9 @@ Player::Player(int startLevel):
     curR = 3 - current->getMaxRelRow();
 }
 
-Board& Player::getBoard() { return board; }
+Board& Player::getBoard() { 
+    return board;
+}
 
 void Player::reset() {
     board.reset();
@@ -25,14 +27,30 @@ void Player::reset() {
     curR = 3; curC = 0;
 }
 
-const Board& Player::getBoard() const { return board; }
-const Block& Player::getCurrentBlock() const { return *current; }
-const Block& Player::getNextBlock() const { return *next; }
-int Player::getLevelNum() const { return level->getLevelNum(); }
-const Score& Player::getScore() const { return score; }
-int Player::getCurR() const { return curR; }
-int Player::getCurC() const { return curC; }
-void Player::setCurR(int r) { curR = r; }
+const Board& Player::getBoard() const {
+    return board;
+}
+const Block& Player::getCurrentBlock() const {
+    return *current;
+}
+const Block& Player::getNextBlock() const {
+    return *next;
+}
+int Player::getLevelNum() const {
+    return level->getLevelNum();
+}
+const Score& Player::getScore() const {
+    return score;
+}
+int Player::getCurR() const {
+    return curR;
+}
+int Player::getCurC() const {
+    return curC;
+}
+void Player::setCurR(int r) {
+    curR = r;
+}
 
 bool Player::spawnNext() {
     current = std::move(next);
