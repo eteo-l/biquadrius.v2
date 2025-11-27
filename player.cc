@@ -42,7 +42,6 @@ public:
     void moveLeft();
     void moveRight();
     void moveDown();
-    // void moveUp();
     void rotateCW();
     void rotateCCW();
     int drop(); // returns lines cleared

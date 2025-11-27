@@ -19,7 +19,11 @@ void Game::run() {
     td.render();
 
     while (!gameOver && std::getline(std::cin, line)) {
-        auto [mult, cmd, forced] = parser.parse(line);
+        auto temp = parser.parse(line);
+        auto mult = temp.mult;
+        auto cmd = temp.cmd;
+        auto forced = temp.forced;
+        // auto [mult, cmd, forced] = parser.parse(line);
 
         Player *active = (turn == 0 ? &p1 : &p2);
 
@@ -33,7 +37,6 @@ void Game::run() {
                     case CommandType::Left: active->moveLeft(); break;
                     case CommandType::Right: active->moveRight(); break;
                     case CommandType::Down: active->moveDown(); break;
-                    // case CommandType::Up: active->moveUp(); break;
                     case CommandType::CW: active->rotateCW(); break;
                     case CommandType::CCW: active->rotateCCW(); break;
                     case CommandType::LevelUp: active->levelUp(); break;

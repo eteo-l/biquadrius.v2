@@ -22,12 +22,10 @@ sysheaders:
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header sstream
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header iostream
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header ostream
-	$(CXX) $(CXXFLAGS) -c -x c++-system-header cctype
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header cstdlib
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header vector
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header algorithm
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header memory
-	$(CXX) $(CXXFLAGS) -c -x c++-system-header tuple
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header utility
 	$(CXX) $(CXXFLAGS) -c -x c++-system-header string
 
