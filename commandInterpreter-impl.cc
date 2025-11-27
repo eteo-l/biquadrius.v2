@@ -7,12 +7,26 @@ static bool startsWith(const std::string &s, const std::string &p) {
     return s.size() >= p.size() && s.substr(0, p.size()) == p;
 }
 
-std::tuple<int, CommandType, char>
-CommandInterpreter::parse(const std::string &line) const {
+
+// REMOVE TUPLE!!!
+// return a struct instead
+
+
+// theParse CommandInterpreter::parse(const std::string) {
+//     if (line.empty()) return theParse{1, CommandType::Invalid, 0};
+
+//     int i = 0;
+//     int mult = 0;
+
+//     while
+
+// }
+
+std::tuple<int, CommandType, char> CommandInterpreter::parse(const std::string &line) const {
     if (line.empty()) return {1, CommandType::Invalid, 0};
 
     int i = 0, mult = 0;
-    while (i < (int)line.size() && std::isdigit(line[i])) {
+    while (i < static_cast<int>(line.size()) && std::isdigit(line[i])) {
         mult = mult * 10 + (line[i] - '0');
         i++;
     }
@@ -25,7 +39,7 @@ CommandInterpreter::parse(const std::string &line) const {
     if (startsWith(cmd, "left")) return {mult, CommandType::Left, 0};
     if (startsWith(cmd, "right")) return {mult, CommandType::Right, 0};
     if (startsWith(cmd, "down")) return {mult, CommandType::Down, 0};
-    if (startsWith(cmd, "up")) return {mult, CommandType::Up, 0};
+    // if (startsWith(cmd, "up")) return {mult, CommandType::Up, 0};
     if (startsWith(cmd, "drop")) return {mult, CommandType::Drop, 0};
     if (startsWith(cmd, "clockwise")) return {mult, CommandType::CW, 0};
     if (startsWith(cmd, "counterclockwise")) return {mult, CommandType::CCW, 0};

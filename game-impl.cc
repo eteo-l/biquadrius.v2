@@ -33,7 +33,7 @@ void Game::run() {
                     case CommandType::Left: active->moveLeft(); break;
                     case CommandType::Right: active->moveRight(); break;
                     case CommandType::Down: active->moveDown(); break;
-                    case CommandType::Up: active->moveUp(); break;
+                    // case CommandType::Up: active->moveUp(); break;
                     case CommandType::CW: active->rotateCW(); break;
                     case CommandType::CCW: active->rotateCCW(); break;
                     case CommandType::LevelUp: active->levelUp(); break;
