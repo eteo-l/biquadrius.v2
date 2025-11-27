@@ -16,42 +16,72 @@ const std::vector<Point>& Block::getOffsets() const { return offsets; }
 //     return y;
 // }
 
-// helper: normalize so lower-left of bounding box is at (0,0)
-static void normalize(std::vector<Point> &pts) {
-    int minR = pts[0].r;
-    int minC = pts[0].c;
-    for (auto &p : pts) {
-        // minR = (minR <= minC ? minR : p.r); DOES NOT WORK
-        // minC = (minC <= p.c ? minC : p.c);
-        minR = std::min(minR, p.r);
-        minC = std::min(minC, p.c);
-    }
-    for (auto &p : pts) {
-        p.r -= minR;
-        p.c -= minC;
-    }
-}
-
 void Block::rotateCW() {
-    // CW: (r, c) ==> (c, -r)
+    // Save the old lower-left anchor
+    int oldMaxR = getMaxRelRow();
+    int oldMinC = 0;
+    for (auto &p : offsets) {
+        oldMinC = std::min(oldMinC, p.c);
+    }
+
+    // Rotate around origin: (r, c) -> (c, -r)
     for (auto &p : offsets) {
         int nr = p.c;
         int nc = -p.r;
         p.r = nr;
         p.c = nc;
     }
-    normalize(offsets); // preserve the lower-left of bounding box based on :contentReference[oaicite:2]{index=2}
+
+    // Compute new lower-left corner
+    int newMaxR = getMaxRelRow();
+    int newMinC = 0;
+    for (auto &p : offsets) {
+        newMinC = std::min(newMinC, p.c);
+    }
+
+    // Compute translation so new LL → old LL
+    int dr = oldMaxR - newMaxR;
+    int dc = oldMinC - newMinC;
+
+    // Apply translation
+    for (auto &p : offsets) {
+        p.r += dr;
+        p.c += dc;
+    }
 }
 
 void Block::rotateCCW() {
-    // CCW: (r, c) ==> (-c, r)
+    // Save the old lower-left anchor
+    int oldMaxR = getMaxRelRow();
+    int oldMinC = 0;
+    for (auto &p : offsets) {
+        oldMinC = std::min(oldMinC, p.c);
+    }
+
+    // Rotate around origin: (r, c) -> (-c, r)
     for (auto &p : offsets) {
         int nr = -p.c;
         int nc = p.r;
         p.r = nr;
         p.c = nc;
     }
-    normalize(offsets);
+
+    // Compute new lower-left corner
+    int newMaxR = getMaxRelRow();
+    int newMinC = 0;
+    for (auto &p : offsets) {
+        newMinC = std::min(newMinC, p.c);
+    }
+
+    // Compute translation so new LL → old LL
+    int dr = oldMaxR - newMaxR;
+    int dc = oldMinC - newMinC;
+
+    // Apply translation
+    for (auto &p : offsets) {
+        p.r += dr;
+        p.c += dc;
+    }
 }
 
 // Lorena new
