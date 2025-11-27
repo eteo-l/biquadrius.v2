@@ -20,25 +20,3 @@ public:
     Game(int startLevel = 0, const std::vector<BlockType> *seq1 = nullptr, const std::vector<BlockType> *seq2 = nullptr);
     void run();
 };
-
-
-
-// export module Game;
-
-// import Player;
-// import TextDisplay;
-// import CommandInterpreter;
-
-// export class Game {
-//     Player p1;
-//     Player p2;
-//     TextDisplay td;
-//     CommandInterpreter parser;
-
-//     int turn = 0; // starts with p1 by definition
-//     bool gameOver = false;
-
-// public:
-//     Game(int startLevel = 0);
-//     void run();
-// };
