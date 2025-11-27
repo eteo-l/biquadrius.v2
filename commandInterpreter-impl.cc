@@ -39,7 +39,6 @@ std::tuple<int, CommandType, char> CommandInterpreter::parse(const std::string &
     if (startsWith(cmd, "left")) return {mult, CommandType::Left, 0};
     if (startsWith(cmd, "right")) return {mult, CommandType::Right, 0};
     if (startsWith(cmd, "down")) return {mult, CommandType::Down, 0};
-    // if (startsWith(cmd, "up")) return {mult, CommandType::Up, 0};
     if (startsWith(cmd, "drop")) return {mult, CommandType::Drop, 0};
     if (startsWith(cmd, "clockwise")) return {mult, CommandType::CW, 0};
     if (startsWith(cmd, "counterclockwise")) return {mult, CommandType::CCW, 0};
