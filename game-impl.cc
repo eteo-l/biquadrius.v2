@@ -4,8 +4,10 @@ import <iostream>;
 import <string>;
 import Types;
 
-Game::Game(int startLevel)
-    : p1{startLevel}, p2{startLevel}, td{&p1, &p2} {
+using namespace std;
+
+Game::Game(int startLevel): 
+    p1{startLevel}, p2{startLevel}, td{&p1, &p2} {
     p1.getBoard().attach(&td);
     p2.getBoard().attach(&td);
     p1.getBoard().notify();
@@ -13,17 +15,16 @@ Game::Game(int startLevel)
 }
 
 void Game::run() {
-    std::string line;
+    string line;
 
-    std::cout << "Welcome to Biquadris!" << std::endl;
+    cout << "Welcome to Biquadris!" << endl;
     td.render();
 
-    while (!gameOver && std::getline(std::cin, line)) {
+    while (!gameOver && getline(cin, line)) {
         auto temp = parser.parse(line);
         auto mult = temp.mult;
         auto cmd = temp.cmd;
         auto forced = temp.forced;
-        // auto [mult, cmd, forced] = parser.parse(line);
 
         Player *active = (turn == 0 ? &p1 : &p2);
 
@@ -33,43 +34,51 @@ void Game::run() {
             active->forceBlock(charToBlockType(forced));
         } else {
             for (int k = 0; k < mult; ++k) {
-                switch (cmd) {
-                    case CommandType::Left: active->moveLeft(); break;
-                    case CommandType::Right: active->moveRight(); break;
-                    case CommandType::Down: active->moveDown(); break;
-                    case CommandType::CW: active->rotateCW(); break;
-                    case CommandType::CCW: active->rotateCCW(); break;
-                    case CommandType::LevelUp: active->levelUp(); break;
-                    case CommandType::LevelDown: active->levelDown(); break;
-                    case CommandType::Restart:
-                        p1.reset(); 
-                        p2.reset(); 
-                        turn = 0; 
-                        break;
-                    case CommandType::Drop: {
-                        active->drop();
-                        
-                        // Dont call spawnNext() for the player whose turn is starting
-                        // only the player who dropped should get a new block (spawnNext
-                        // is already called inside Player::drop()). Instead, check if
-                        // the next players current block can be placed at their spawn
-                        // position; if not, the game is over.
-                        if (!active->getBoard().canPlace(active->getCurrentBlock(),
-                                                         active->getCurR(),
-                                                         active->getCurC())) {
-                            
-                            active->setCurR(-1); // set to -1 to indicate that the current block cannot fit
-                            gameOver = true;
-                        } 
-                        
-                        // switch player turn after drop
-                        turn = 1 - turn;
-                        active = (turn == 0 ? &p1 : &p2);
-                        
-                        break;
-                    }
-                    default: break;
+                if (cmd == CommandType::Left) {
+                    active->moveLeft();
                 }
+                else if (cmd == CommandType::Right) {
+                    active->moveRight();
+                }
+                else if (cmd == CommandType::Down) {
+                    active->moveDown();
+                }
+                else if (cmd == CommandType::CW) {
+                    active->rotateCW();
+                }
+                else if (cmd == CommandType::CCW) {
+                    active->rotateCCW();
+                }
+                else if (cmd == CommandType::LevelUp) {
+                    active->levelUp();
+                }
+                else if (cmd == CommandType::LevelDown) {
+                    active->levelDown();
+                }
+                else if (cmd == CommandType::Restart) {
+                    p1.reset();
+                    p2.reset();
+                    turn = 0;
+                }
+                else if (cmd == CommandType::Drop) {
+                    active->drop();
+                    // dont call spawnNext() for the player whose turn starting
+                    // only the player who dropped should get a new block (alrady in player:;drop())
+                    // check if next players current block can be placed at their spawn
+                    // position; if not, the game is over.
+                    if (!active->getBoard().canPlace(active->getCurrentBlock(), active->getCurR(), active->getCurC())) {
+                        active->setCurR(-1); // cant place (by MY definition)
+                        gameOver = true;
+                    }
+
+                    // switch player turn after drop
+                    turn = 1 - turn;
+                    active = (turn == 0 ? &p1 : &p2);
+                }
+                else {
+                    // nothing i guess
+                }
+
             }
         }
 
@@ -78,7 +87,7 @@ void Game::run() {
         td.render();
 
         if (gameOver) {
-            std::cout << "Game Over! Player " << (1-turn) << " wins" << std::endl;
+            cout << "Game Over! Player " << (1-turn) << " wins" << endl;
         }
     }
 }
