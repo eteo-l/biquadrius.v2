@@ -18,7 +18,8 @@ p1{startLevel, seq1}, p2{startLevel, seq2}, td{&p1, &p2}
 void Game::run() {
     string line;
 
-    cout << "Welcome to Biquadris!" << endl;
+    cout << "           ˗ˋˏ ♡ ˎˊ˗" << endl;
+    cout << "Welcome to Biquadris!*⸜( •ᴗ• )⸝*" << endl;
     td.render();
 
     while (!gameOver && getline(cin, line)) {

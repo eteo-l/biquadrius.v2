@@ -19,7 +19,7 @@ int Level::getLevelNum() const {
 
 class Level0 : public Level {
     vector<BlockType> seq;
-    int index;
+    size_t index;
 public:
     Level0(const std::vector<BlockType> &sequence) : Level{0}, seq{sequence}, index{0} {}
 
@@ -30,7 +30,10 @@ public:
             index = 0;
         }
         return makeBlock(type, levelNum);
+    }
 
+    bool isDisappearingBlock() const override {
+        return false;
     }
 
 };
@@ -59,6 +62,10 @@ public:
         return makeBlock(type, levelNum);
     }
 
+    bool isDisappearingBlock() const override {
+        return false;
+    }
+
 };
 
 
@@ -82,6 +89,10 @@ public:
         else type = BlockType::O;
 
         return makeBlock(type, levelNum);
+    }
+
+    bool isDisappearingBlock() const override {
+        return false;
     }
 };
 
@@ -108,7 +119,10 @@ public:
 
         return makeBlock(type, levelNum);
     }
-    
+
+    bool isDisappearingBlock() const override {
+        return true;
+    }
 
 };
 

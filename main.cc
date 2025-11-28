@@ -31,7 +31,7 @@ Config parseArgs(int argc, char *argv[]) {
         } else if (arg == "-scriptfile2" && i + 1 < argc) {
             cfg.scriptfile2 = argv[++i];
         } else {
-            cerr << "************* BAD arguments! *************" << endl;
+            cerr << "BAD arguments!" << endl;
             exit(1);
         }
     }

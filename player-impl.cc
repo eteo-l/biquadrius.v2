@@ -96,7 +96,7 @@ void Player::rotateCCW() {
 }
 
 int Player::drop() {
-    while (board.canMove(*current, curR, curC, +1, 0)) {
+    /*while (board.canMove(*current, curR, curC, +1, 0)) {
         curR++;
     }
     board.place(*current, curR, curC);
@@ -104,7 +104,75 @@ int Player::drop() {
     score.addLinesCleared(level->getLevelNum(), cleared);
     // block-cleared scoring later when you track block IDs
     spawnNext();
+    return cleared;*/
+    // NEW: (xinyu)
+    while (board.canMove(*current, curR, curC, +1, 0)) {
+        curR++;
+    }
+
+    int id = nextBlockId++;
+    bool isExpiring = level->isDisappearingBlock();
+    int timeout = isExpiring ? 10 : -1;
+
+    droppedBlocks.push_back(DroppedBlock{
+        id,
+        current->getLevelCreated(),
+        true,
+        timeout
+    });
+
+    board.place(*current, curR, curC, id);
+    int cleared = board.clearFullRows();
+
+    score.addLinesCleared(level->getLevelNum(), cleared);
+
+    // NEW: check which blocks are now fully gone, 
+    // and check for Blocks dropped before 10 more blocks dropped
+    updateClearedBlocksScoring();
+    decrementAndExpireOldBlocks(); 
+
+    spawnNext();
     return cleared;
+    
+}
+
+// NEW xinyu Helper function
+void Player::updateClearedBlocksScoring() {
+    const auto &ids = board.getBlockIdGrid();
+    // mark which ids are still present
+    std::vector<bool> present(nextBlockId, false);
+
+    for (int r = 0; r < Board::Rows; ++r) {
+        for (int c = 0; c < Board::Cols; ++c) {
+            int id = ids[r][c];
+            if (id >= 0 && id < nextBlockId) {
+                present[id] = true;
+            }
+        }
+    }
+
+    // any droppedBlock with alive && not present => fully cleared now
+    for (auto &db : droppedBlocks) {
+        if (db.alive && !present[db.id]) {
+            db.alive = false;
+            score.addBlockCleared(db.levelCreated);
+        }
+    }
+}
+
+// NEW xinyu Helper function
+void Player::decrementAndExpireOldBlocks() {
+    for (auto &db : droppedBlocks) {
+        if (!db.alive) continue;
+        if (db.dropsLeft < 0) continue; // non-expiring
+
+        db.dropsLeft--;
+        if (db.dropsLeft == 0) {
+            // erase this block from Board, but no score
+            board.eraseBlock(db.id);
+            db.alive = false;
+        }
+    }
 }
 
 void Player::levelUp() {

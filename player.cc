@@ -8,6 +8,14 @@ import Level;
 import Score;
 import Types;
 
+// NEW xinyu
+struct DroppedBlock {
+    int id;
+    int levelCreated;
+    bool alive = true;
+    int dropsLeft = -1;
+};
+
 export class Player {
     Board board;
     std::unique_ptr<Level> level;
@@ -20,6 +28,11 @@ export class Player {
     int curC = 0;
 
 public:
+    // NEW xinyu
+    std::vector<DroppedBlock> droppedBlocks;
+    int nextBlockId = 0;
+    int blocksDropped = 0;
+    // new fin
     Player(int startLevel = 0, const std::vector<BlockType> *level0Seq = nullptr);
     // Player(int startLevel = 0);
 
@@ -49,6 +62,8 @@ public:
     void rotateCW();
     void rotateCCW();
     int drop();         // returns num of lines cleared
+    void updateClearedBlocksScoring();    // Helper function for drop()
+    void decrementAndExpireOldBlocks(); // Helper function for erasing blocks
     void levelUp();
     void levelDown();
 

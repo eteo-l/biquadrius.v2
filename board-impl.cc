@@ -1,6 +1,10 @@
 module Board;
 
-Board::Board() : grid(Rows, std::vector<char>(Cols, ' ')) {}
+/*Board::Board() : grid(Rows, std::vector<char>(Cols, ' ')) {}*/
+
+Board::Board()
+    : grid(Rows, std::vector<char>(Cols, ' ')),
+      blockIds(Rows, std::vector<int>(Cols, -1)) {}
 
 void Board::reset() {
     for (auto &row : grid) {
@@ -25,15 +29,17 @@ bool Board::canPlace(const Block &b, int baseR, int baseC) const {
     return true;
 }
 
-void Board::place(const Block &b, int baseR, int baseC) {
+void Board::place(const Block &b, int baseR, int baseC, int blockId) {
     for (auto &off : b.getOffsets()) {
         int r = baseR + off.r;
         int c = baseC + off.c;
         grid[r][c] = b.getChar();
+        blockIds[r][c] = blockId; // NEW xinyu
     }
     // re-render the board
     notify();
 }
+
  
 bool Board::canMove(const Block &b, int baseR, int baseC, int dr, int dc) const {
     return canPlace(b, baseR + dr, baseC + dc);
@@ -51,8 +57,10 @@ int Board::clearFullRows() {
             // drop everything above down by 1
             for (int rr = r; rr > 0; --rr) {
                 grid[rr] = grid[rr-1];
+                blockIds[rr] = blockIds[rr-1]; // NEW xinyu
             }
             grid[0] = std::vector<char>(Cols, ' ');
+            blockIds[0] = std::vector<int>(Cols, -1); // NEW xinyu
         }
     }
     if (cleared > 0) notify();
@@ -69,4 +77,21 @@ std::vector<std::vector<char>> Board::renderWithCurrent(const Block &b, int base
             tmp[r][c] = b.getChar();
     }
     return tmp;
+}
+
+// NEW xinyu
+const std::vector<std::vector<int>>& Board::getBlockIdGrid() const {
+    return blockIds;
+}
+
+void Board::eraseBlock(int blockId) {
+    for (int r = 0; r < Rows; ++r) {
+        for (int c = 0; c < Cols; ++c) {
+            if (blockIds[r][c] == blockId) {
+                blockIds[r][c] = -1;
+                grid[r][c] = ' ';
+            }
+        }
+    }
+    notify();
 }

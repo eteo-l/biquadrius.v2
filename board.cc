@@ -17,6 +17,8 @@ public:
 
 private:
     std::vector<std::vector<char>> grid; // starts with ' ' (as empty then '.' looks nicer)
+    // NEW xinyu
+    std::vector<std::vector<int>> blockIds;
 
     int originR = 3; // spawn row (after reserve)
     int originC = 0; // spawn col
@@ -29,7 +31,8 @@ public:
     const std::vector<std::vector<char>>& getGrid() const;
 
     bool canPlace(const Block &b, int baseR, int baseC) const;
-    void place(const Block &b, int baseR, int baseC);
+    // NEW xinyu (new parameter int blockId added)
+    void place(const Block &b, int baseR, int baseC, int blockId);
 
     bool canMove(const Block &b, int baseR, int baseC, int dr, int dc) const;
 
@@ -37,4 +40,8 @@ public:
 
     // draw current block on a temp copy (for display)
     std::vector<std::vector<char>> renderWithCurrent(const Block &b, int baseR, int baseC) const;
+
+    const std::vector<std::vector<int>>& getBlockIdGrid() const; // NEW xinyu
+
+    void eraseBlock(int blockId); // NEW xinyu for erasing block after 10 other blocks dropped
 };

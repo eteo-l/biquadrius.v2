@@ -19,6 +19,9 @@ public:
 
     // use later?
     // virtual bool isHeavy() const;
+
+    // NEW xinyu
+    virtual bool isDisappearingBlock() const { return false; }
 };
 
 export std::unique_ptr<Level> makeLevel0(const std::vector<BlockType> &sequence);

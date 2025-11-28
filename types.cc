@@ -12,7 +12,7 @@ export struct Point {
 export enum class BlockType { I, J, L, O, S, Z, T, Star};
 
 export enum class CommandType {
-    Left, Right, Down, Up, Drop,
+    Left, Right, Down, Drop,
     CW, CCW,
     LevelUp, LevelDown,
     Restart,
