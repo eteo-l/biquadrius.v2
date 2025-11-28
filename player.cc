@@ -36,7 +36,6 @@ public:
     Player(int startLevel = 0, const std::vector<BlockType> *level0Seq = nullptr);
     // Player(int startLevel = 0);
 
-
     void reset();
 
     // getters for display

@@ -19,7 +19,13 @@ void TextDisplay::update(Subject &) {
 
     buffer.push_back("Level: " + std::to_string(p1->getLevelNum()) + "        Level: " + std::to_string(p2->getLevelNum()));
     buffer.push_back("Score: " + std::to_string(p1->getScore().getCurrent()) + "        Score: " + std::to_string(p2->getScore().getCurrent()));
-    buffer.push_back("     High Score: " + std::to_string(p1->getScore().getHi()));
+
+    //get highest score between two players
+    if (p1->getScore().getHi() >= p2->getScore().getHi())
+        buffer.push_back("     High Score: " + std::to_string(p1->getScore().getHi()));
+    else
+        buffer.push_back("     High Score: " + std::to_string(p2->getScore().getHi()));
+        
     buffer.push_back("----------- -----------");
 
     auto g1 = p1->getBoard().renderWithCurrent(p1->getCurrentBlock(), p1->getCurR(), p1->getCurC());

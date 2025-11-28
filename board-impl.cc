@@ -63,7 +63,12 @@ int Board::clearFullRows() {
             blockIds[0] = std::vector<int>(Cols, -1); // NEW xinyu
         }
     }
-    if (cleared > 0) notify();
+    
+    /* i think this part is unnecessary since game already calls notify() after each command
+    if (cleared > 0) {
+        notify();
+    } 
+    */
     return cleared;
 }
 

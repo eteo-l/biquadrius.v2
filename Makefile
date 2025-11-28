@@ -13,6 +13,7 @@ OBJS = \
         player.o player-impl.o \
         textdisplay.o textdisplay-impl.o \
         commandInterpreter.o commandInterpreter-impl.o \
+		playereffect.o playereffect-impl.o \
         game.o game-impl.o \
         main.o
 
@@ -94,8 +95,13 @@ commandInterpreter.o: commandInterpreter.cc types.o
 commandInterpreter-impl.o: commandInterpreter-impl.cc commandInterpreter.o
 	$(CXX) $(CXXFLAGS) -c commandInterpreter-impl.cc
 
+playereffect.o: playereffect.cc player.o
+	$(CXX) $(CXXFLAGS) -c playereffect.cc
 
-game.o: game.cc player.o textdisplay.o commandInterpreter.o
+playereffect-impl.o: playereffect-impl.cc playereffect.o player.o
+	$(CXX) $(CXXFLAGS) -c playereffect-impl.cc
+
+game.o: game.cc player.o textdisplay.o commandInterpreter.o playereffect.o
 	$(CXX) $(CXXFLAGS) -c game.cc
 
 game-impl.o: game-impl.cc game.o types.o
