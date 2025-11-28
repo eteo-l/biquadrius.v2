@@ -84,6 +84,9 @@ int Player::getCurR() const {
 int Player::getCurC() const {
     return curC;
 }
+void Player::setCurrent(std::unique_ptr<Block> b) {
+    current = std::move(b);
+}
 void Player::setCurR(int r) {
     curR = r;
 }

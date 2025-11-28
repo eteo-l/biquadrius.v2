@@ -1,5 +1,7 @@
 module PlayerEffect;
 
+import Types;
+import Block;
 import Player;
 import <iostream>;
 import <vector>;
@@ -59,36 +61,6 @@ void BlindEffect::apply(Player &p1, Player &p2) {
         }
         cout << endl;
     }
-        /*
-        for (int c = 0; c < 23; ++c) {
-            char ch1 = p1.getBoard().getGrid()[r][c];
-            char ch2 = p2.getBoard().getGrid()[r][c-12];
-
-            if (c == 11) {
-                cout << " ";
-            } else if (owner == 0) {
-                // p1 is blinded
-                if ((r >= 3 && r <= 12) || (c >= 3 && c <= 9)) {
-                    cout << "?";
-                } else if (c < 11){
-                    cout << (ch1 == ' ' ? '.' : ch1);
-                } else {
-                    cout << (ch2 == ' ' ? '.' : ch2);
-                }
-            } else {
-                // p2 is blinded
-                if ((r >= 3 && r <= 12) || (c >= 14 && c <= 20)) {
-                    cout << "?";
-                } else if (c < 11) {
-                    cout << (ch1 == ' ' ? '.' : ch1);
-                } else {
-                    cout << (ch2 == ' ' ? '.' : ch2);
-                }
-            }
-        }
-        cout << endl;
-    }
-    */
 
     cout << "----------- -----------" << endl;
     cout << "Next:       Next:" << endl;
@@ -137,4 +109,9 @@ void HeavyEffect::apply(Player &p1, Player &p2) {
 ForceEffect::ForceEffect(int p, char f) : PlayerEffect(p), forcedType{f} {}
 
 void ForceEffect::apply(Player &p1, Player &p2) {
+    if (owner == 0) {
+        p1.setCurrent(makeBlock(charToBlockType(forcedType), p1.getLevelNum()));
+    } else {
+        p2.setCurrent(makeBlock(charToBlockType(forcedType), p2.getLevelNum()));
+    }
 }

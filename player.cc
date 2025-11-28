@@ -61,7 +61,8 @@ public:
     const Score& getScore() const;
     int getCurR() const;
     int getCurC() const;
-
+    void setCurrent(std::unique_ptr<Block> b);
+    
     // setter to indicate block does not fit when game over
     void setCurR(int r);
 

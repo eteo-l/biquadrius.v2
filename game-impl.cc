@@ -87,6 +87,15 @@ void Game::run() {
                         applyEffects(1 - turn);
                     }
 
+                    // apply forceeffect if exists and then deletes it
+                    for (size_t i = 0; i < effects.size(); ++i) {
+                        if (dynamic_cast<ForceEffect*>(effects[i].get())) {
+                            effects[i]->apply(p1, p2);
+                            effects.erase(effects.begin() + i);  
+                            break;
+                        }
+                    } 
+
                     // dont call spawnNext() for the player whose turn starting
                     // only the player who dropped should get a new block (alrady in player:;drop())
                     // check if next players current block can be placed at their spawn

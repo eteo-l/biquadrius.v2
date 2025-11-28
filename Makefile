@@ -98,7 +98,7 @@ commandInterpreter-impl.o: commandInterpreter-impl.cc commandInterpreter.o
 playereffect.o: playereffect.cc player.o
 	$(CXX) $(CXXFLAGS) -c playereffect.cc
 
-playereffect-impl.o: playereffect-impl.cc playereffect.o player.o
+playereffect-impl.o: playereffect-impl.cc playereffect.o types.o block.o player.o
 	$(CXX) $(CXXFLAGS) -c playereffect-impl.cc
 
 game.o: game.cc player.o textdisplay.o commandInterpreter.o playereffect.o
