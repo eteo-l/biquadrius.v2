@@ -24,6 +24,13 @@ export class Player {
     std::unique_ptr<Block> current;
     std::unique_ptr<Block> next;
 
+    // new 
+    std::unique_ptr<Level> overrideLevel;
+    bool overrideOn = false;
+    std::vector<BlockType> level0Sequence;
+    bool hasLevel0Seq = false;
+
+
     int curR = 3; // if curR == -1 then indicates game over
     int curC = 0;
 
@@ -35,6 +42,13 @@ public:
     // new fin
     Player(int startLevel = 0, const std::vector<BlockType> *level0Seq = nullptr);
     // Player(int startLevel = 0);
+
+    // new mike
+    void setOverride(const std::vector<BlockType> &seq);
+    void clearOverride();
+    bool hasOverride() const;
+
+    std::unique_ptr<Level>& getLevel();
 
     void reset();
 
@@ -67,7 +81,6 @@ public:
     void levelDown();
 
 
-    // REMOVE???
-    // for testing replacement later (I/J/L commands)
+    // for forcing a replacement later (I/J/L cmds)
     void forceBlock(BlockType t);
 };

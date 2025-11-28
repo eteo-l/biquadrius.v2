@@ -26,6 +26,7 @@ bool Board::canPlace(const Block &b, int baseR, int baseC) const {
         if (r < 0 || r >= Rows || c < 0 || c >= Cols) return false; // Lorena edited, changed r < 3 to r < 0
         if (grid[r][c] != ' ') return false;
     }
+    // blocks.push_back(b);
     return true;
 }
 
@@ -71,7 +72,6 @@ int Board::clearFullRows() {
     */
     return cleared;
 }
-
 std::vector<std::vector<char>> Board::renderWithCurrent(const Block &b, int baseR, int baseC) const {
     auto tmp = grid;
     if (baseR == -1) return tmp; // if game over, just return the grid

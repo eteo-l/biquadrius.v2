@@ -5,7 +5,7 @@ void Score::resetCurrent() {
 }
 
 void Score::addLinesCleared(int level, int lines) {
-    if (lines <= 0) return;
+    // if (lines <= 0) return;
     int pts = (level + lines) * (level + lines);
     current += pts;
     if (current > hi) {

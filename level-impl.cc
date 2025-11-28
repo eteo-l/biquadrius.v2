@@ -3,6 +3,7 @@ module Level;
 import <vector>;
 import <cstdlib>;
 import <memory>;
+import <string>;
 import Types;
 import Block;
 
@@ -37,7 +38,6 @@ public:
     }
 
 };
-
 
 class Level1 : public Level {
 public:
@@ -125,6 +125,25 @@ public:
     }
 
 };
+
+class LevelOverride : public Level {
+    std::vector<BlockType> seq;
+    int index = 0;
+
+public:
+    LevelOverride(const std::vector<BlockType> &s): Level{-1}, seq{s}, index{0} {}
+
+    std::unique_ptr<Block> createBlock() override {
+        BlockType type = seq[index];
+        index = (index + 1) % seq.size();
+        return makeBlock(type, levelNum);
+    }
+};
+
+
+std::unique_ptr<Level> makeLevelOverride(const std::vector<BlockType> &s) {
+    return std::make_unique<LevelOverride>(s);
+}
 
 
 unique_ptr<Level> makeLevel0(const std::vector<BlockType> &sequence) {

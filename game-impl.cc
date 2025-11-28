@@ -2,6 +2,7 @@ module Game;
 
 import <iostream>;
 import <string>;
+import <fstream>;
 import Types;
 
 using namespace std;
@@ -29,6 +30,7 @@ void Game::run() {
         auto mult = temp.mult;
         auto cmd = temp.cmd;
         auto forced = temp.forced;
+        auto file = temp.file;
 
         Player *active = (turn == 0 ? &p1 : &p2);
 
@@ -42,16 +44,20 @@ void Game::run() {
                     active->moveLeft();
                 }
                 else if (cmd == CommandType::Right) {
+                    // if heavy moveDown()
                     active->moveRight();
                 }
                 else if (cmd == CommandType::Down) {
+                    // if heavy moveDown()
                     active->moveDown();
                 }
                 else if (cmd == CommandType::CW) {
+                    // if heavy moveDown()
                     active->rotateCW();
                 }
                 else if (cmd == CommandType::CCW) {
                     active->rotateCCW();
+                    // if heavy moveDown()
                 }
                 else if (cmd == CommandType::LevelUp) {
                     active->levelUp();
@@ -93,6 +99,18 @@ void Game::run() {
                     // switch player turn after drop
                     turn = 1 - turn;
                     active = (turn == 0 ? &p1 : &p2);
+                } 
+                else if (cmd == CommandType::NoRandom) {
+                    ifstream in{file};
+                    vector<BlockType> seq;
+                    char c;
+                    while (in >> c) {
+                        seq.push_back(charToBlockType(c));
+                    }
+                    active->setOverride(seq);
+                }
+                else if (cmd == CommandType::Random) {
+                    active->clearOverride();
                 }
                 else {
                     // nothing i guess
@@ -136,17 +154,17 @@ void Game::applyEffects(int opponent) {
 
         if (action == "blind" || action == "heavy" || action.starts_with("force")) break;
 
-        std::cout << "Invalid effect.\n";
+        std::cout << "Invalid effect." << endl;
     }
 
     // Apply the chosen effect
     if (action == "blind") {
         effects.push_back(std::make_unique<BlindEffect>(opponent));
-        std::cout << "Blind effect applied!\n";
+        std::cout << "Blind effect applied!" << endl;
     }
     else if (action == "heavy") {
         effects.push_back(std::make_unique<HeavyEffect>(opponent));
-        std::cout << "Heavy effect applied!\n";
+        std::cout << "Heavy effect applied!" << endl;
     }
     else if (action.starts_with("force")) {
         // Prompt for block type until valid
@@ -157,7 +175,7 @@ void Game::applyEffects(int opponent) {
                 std::cout << "Enter block type (I, J, L, O, S, T, Z): ";
                 if (!std::getline(std::cin, block)) continue; // bad input → retry
                 if (block.size() != 1) {
-                    std::cout << "Please enter exactly one character.\n";
+                    std::cout << "Please enter exactly one character." << endl; 
                     continue;
                 }
             } else {
@@ -168,11 +186,11 @@ void Game::applyEffects(int opponent) {
                 blockType=='O' || blockType=='S' || blockType=='T' ||
                 blockType=='Z') break;
 
-            std::cout << "Invalid block type. Try again.\n";
+            std::cout << "Invalid block type. Try again." << endl;
         }
 
         // Apply ForceEffect to the opponent
         effects.push_back(std::make_unique<ForceEffect>(opponent, blockType));
-        std::cout << "Force effect applied! Next block will be: " << blockType << "\n";
+        std::cout << "Force effect applied! Next block will be: " << blockType << endl;
     }
 }

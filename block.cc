@@ -20,6 +20,8 @@ public:
     const std::vector<Point>& getOffsets() const;
     // int minimum(int x, int y);
 
+    //  // return true if offests vec is empty
+
     // rotation changes offsets only (board checks legality)
     virtual void rotateCW();
     virtual void rotateCCW();

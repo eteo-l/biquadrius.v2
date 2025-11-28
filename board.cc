@@ -8,7 +8,7 @@ import Block;
 
 export class Board : public Subject {
 public:
-    //bruh remove ts
+    // prob should remove ts
     // const int should be fine lowk
     // and if anything move this down to other public section
     // two public sections look weird
@@ -36,7 +36,7 @@ public:
 
     bool canMove(const Block &b, int baseR, int baseC, int dr, int dc) const;
 
-    int clearFullRows();
+    int clearFullRows(); // remove offests from blocks vec
 
     // draw current block on a temp copy (for display)
     std::vector<std::vector<char>> renderWithCurrent(const Block &b, int baseR, int baseC) const;

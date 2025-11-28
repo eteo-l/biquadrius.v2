@@ -93,10 +93,12 @@ int Block::getMaxRelRow() const {
     return maxR;
 }
 
+
+
 std::unique_ptr<Block> makeBlock(BlockType t, int lvl) {
     // initial blcoks based on :contentReference[oaicite:3]{index=3}
     
-    // Mike new
+    // new
     if (t == BlockType::I) {
         return std::make_unique<Block>(t, std::vector<Point>{{0,0},{0,1},{0,2},{0,3}}, lvl);
     } else if (t == BlockType::J) {

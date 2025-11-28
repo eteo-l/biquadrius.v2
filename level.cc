@@ -24,6 +24,8 @@ public:
     virtual bool isDisappearingBlock() const { return false; }
 };
 
+export std::unique_ptr<Level> makeLevelOverride(const std::vector<BlockType> &s);
+
 export std::unique_ptr<Level> makeLevel0(const std::vector<BlockType> &sequence);
 
 export std::unique_ptr<Level> makeLevel(int n);

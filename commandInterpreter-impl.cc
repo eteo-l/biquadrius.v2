@@ -2,13 +2,8 @@ module CommandInterpreter;
 
 using namespace std;
 
-CommandInterpreter::theParse::theParse(int mult, CommandType cmd, char forced): mult{mult}, cmd{cmd}, forced{forced} {}
+CommandInterpreter::theParse::theParse(int mult, CommandType cmd, char forced, string file): mult{mult}, cmd{cmd}, forced{forced}, file{file} {}
 
-
-//not workings (REMOVE LATER??)
-bool CommandInterpreter::startsWith(const std::string &s, const std::string &p) const {
-    return s.size() >= p.size() && s.substr(0, p.size()) == p;
-}
 
 bool CommandInterpreter::isADigit(char c) const {
     return c >= '0' && c <= '9';
@@ -17,7 +12,7 @@ bool CommandInterpreter::isADigit(char c) const {
 
 // Mike new
 CommandInterpreter::theParse CommandInterpreter::parse(const std::string &line) const {
-    if (line.empty()) return theParse{1, CommandType::Invalid, 0};
+    if (line.empty()) return theParse{1, CommandType::Invalid, 0, ""};
 
     int i = 0;
     int mult = 0;
@@ -31,29 +26,42 @@ CommandInterpreter::theParse CommandInterpreter::parse(const std::string &line) 
     if (mult == 0) mult = 1;
     string cmd = line.substr(i);
 
-    if (cmd == "EOF") return theParse{1, CommandType::EOFCommand, 0};
-    if (cmd == "exit") return theParse{1, CommandType::EOFCommand, 0};
+    if (cmd == "EOF") return theParse{1, CommandType::EOFCommand, 0, ""};
+    string leftPrefix = "lef";
+    string rightPrefix = "ri";
+    string downPrefix = "do";
+    string dropPrefix = "dr";
+    string cwPrefix = "cl";
+    string ccwPrefix = "co";
+    string levelUpPrefix = "levelu";
+    string levelDownPrefix = "leveld";
+    string restartPrefix = "re";
+    string randomPrefix = "ra";
+    string norandomPrefix = "no";
+    // string sequencePrefix = "s";
 
-    if (startsWith(cmd, "left")) return theParse{mult, CommandType::Left, 0};
-    if (startsWith(cmd, "right")) return theParse{mult, CommandType::Right, 0};
-    if (startsWith(cmd, "down")) return theParse{mult, CommandType::Down, 0};
-    if (startsWith(cmd, "drop")) return theParse{mult, CommandType::Drop, 0};
-    if (startsWith(cmd, "clockwise")) return theParse{mult, CommandType::CW, 0};
-    if (startsWith(cmd, "counterclockwise")) return theParse{mult, CommandType::CCW, 0};
-    if (startsWith(cmd, "levelup")) return theParse{mult, CommandType::LevelUp, 0};
-    if (startsWith(cmd, "leveldown")) return theParse{mult, CommandType::LevelDown, 0};
-    if (startsWith(cmd, "restart")) return theParse{1, CommandType::Restart, 0};
+
+    
+    if (cmd.substr(0, leftPrefix.size()) == leftPrefix) return theParse{mult, CommandType::Left, 0, ""};
+    if (cmd.substr(0, rightPrefix.size()) == rightPrefix) return theParse{mult, CommandType::Right, 0, ""};
+    if (cmd.substr(0, downPrefix.size()) == downPrefix) return theParse{mult, CommandType::Down, 0, ""};
+    if (cmd.substr(0, dropPrefix.size()) == dropPrefix) return theParse{mult, CommandType::Drop, 0, ""};
+    if (cmd.substr(0, cwPrefix.size()) == cwPrefix) return theParse{mult, CommandType::CW, 0, ""};
+    if (cmd.substr(0, ccwPrefix.size()) == ccwPrefix) return theParse{mult, CommandType::CCW, 0, ""};
+    if (cmd.substr(0, levelUpPrefix.size()) == levelUpPrefix) return theParse{mult, CommandType::LevelUp, 0, ""};
+    if (cmd.substr(0, levelDownPrefix.size()) == levelDownPrefix) return theParse{mult, CommandType::LevelDown, 0, ""};
+    if (cmd.substr(0, restartPrefix.size()) == restartPrefix) return theParse{1, CommandType::Restart, 0, ""};
+    if (cmd.substr(0, norandomPrefix.size()) == norandomPrefix) {return theParse{1, CommandType::NoRandom, 0, cmd.substr(8)}; }// 8 chars in sequence
+    if (cmd.substr(0, randomPrefix.size()) == randomPrefix) return theParse{1, CommandType::Random, 0, ""};
+
 
     // testing the single blocks
     if (cmd.size() == 1) {
         if (cmd[0] == 'I' || cmd[0] == 'J' || cmd[0] == 'L' || cmd[0] == 'O' || cmd[0] == 'S' || cmd[0] == 'T' || cmd[0] == 'Z') {
-            return theParse{1, CommandType::Invalid, cmd[0]};
+            return theParse{1, CommandType::Invalid, cmd[0], ""};
         }
     }
-    // if (cmd.size() == 1 && string("IJLOSTZ").find(cmd[0]) != std::string::npos) {
-    //     return theParse{1, CommandType::Invalid, cmd[0]};
-    // }
 
-    return theParse{1, CommandType::Invalid, 0};
+    return theParse{1, CommandType::Invalid, 0, ""};
 
 }

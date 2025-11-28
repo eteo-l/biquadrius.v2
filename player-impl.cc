@@ -1,21 +1,29 @@
 module Player;
 
 import <utility>;
+import <memory>;
 import Types;
 import Block;
 import Level;
 import Board;
 import Score; 
 
+
 // mike new overloaded player ctor
-Player::Player(int startLevel, const std::vector<BlockType> *level0Seq)
-{
+Player::Player(int startLevel, const std::vector<BlockType> *level0Seq) {
+    
+    current = std::move(next);
+
     if (startLevel == 0 && level0Seq) {
-        level = makeLevel0(*level0Seq);
+        hasLevel0Seq = true;
+        level0Sequence = *level0Seq;
+        level = makeLevel0(level0Sequence);
     } else {
         level = makeLevel(startLevel);
     }
+    
 
+    overrideOn = false;
     current = level->createBlock();
     next = level->createBlock();
     curR = 3 - current->getMaxRelRow();
@@ -24,6 +32,27 @@ Player::Player(int startLevel, const std::vector<BlockType> *level0Seq)
 Board& Player::getBoard() { 
     return board;
 }
+
+// new Mike **
+std::unique_ptr<Level>& Player::getLevel() {
+    return level;
+}
+
+void Player::setOverride(const std::vector<BlockType> &seq) {
+    overrideLevel = makeLevelOverride(seq);
+    overrideOn = true;
+    next = overrideLevel->createBlock();
+}
+
+void Player::clearOverride() {
+    overrideLevel.reset();
+    overrideOn = false;
+}
+
+bool Player::hasOverride() const {
+    return overrideOn;
+}
+// **
 
 void Player::reset() {
     board.reset();
@@ -61,9 +90,17 @@ void Player::setCurR(int r) {
 
 bool Player::spawnNext() {
     current = std::move(next);
-    next = level->createBlock();
-    curR = 3 - current->getMaxRelRow(); curC = 0;
-    // check if current block fits if its bottom row is occupying the row below the reserve rows
+
+    // create next block depending on if norandom is applied or not
+    if (overrideOn && overrideLevel) {
+        next = overrideLevel->createBlock();
+    } else {
+        next = level->createBlock();
+    }
+
+    // reset postion for current block and check
+    curR = 3 - current->getMaxRelRow();
+    curC = 0;
     return board.canPlace(*current, curR, curC);
 }
 
@@ -102,6 +139,9 @@ int Player::drop() {
     board.place(*current, curR, curC);
     int cleared = board.clearFullRows();
     score.addLinesCleared(level->getLevelNum(), cleared);
+    // if (board.numBlocksCleared()) {
+    //     score.addBlockCleared();
+    // }
     // block-cleared scoring later when you track block IDs
     spawnNext();
     return cleared;*/
@@ -181,18 +221,24 @@ void Player::levelUp() {
     if (n == 4) n = 3;
     level = makeLevel(n);
 }
+
+
+// new Mike
 void Player::levelDown() {
     int n = level->getLevelNum();
-    level = makeLevel(n - 1);
-    // n--;
-    // if (n <= 0) {
-    //     n = 0;
-    //     // need the sequence here!
-    //     level = makeLevel0(const std::vector<BlockType> &sequence);
-    //     return;
-    // }
-    // level = makeLevel(n);
+    n--;
+    if (n <= 0) {
+        if (hasLevel0Seq) {
+            level = makeLevel0(level0Sequence);
+        }
+        else {
+            level = makeLevel0(std::vector<BlockType>{BlockType::I}); // or will have error
+        }
+    } else {
+        level = makeLevel(n);
+    }
 }
+
 
 void Player::forceBlock(BlockType t) {
     current = makeBlock(t, level->getLevelNum());

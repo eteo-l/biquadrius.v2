@@ -16,7 +16,7 @@ export enum class CommandType {
     CW, CCW,
     LevelUp, LevelDown,
     Restart,
-    Invalid, EOFCommand
+    Invalid, EOFCommand, NoRandom, Random
 };
 
 export BlockType charToBlockType(char ch);
