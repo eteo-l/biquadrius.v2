@@ -8,6 +8,7 @@ export class PlayerEffect {
 
     public:
         PlayerEffect(int p);
+        int getOwner();
         virtual void apply(Player &p1, Player &p2) = 0;
 };
 
@@ -17,9 +18,13 @@ export class BlindEffect : public PlayerEffect {
         void apply(Player &p1, Player &p2);
 };
 
+//new
 export class HeavyEffect : public PlayerEffect {
+    bool dropped = false;
     public:
         HeavyEffect(int p);
+        bool getDropped();
+        void setDropped(bool d);
         void apply(Player &p1, Player &p2);
 };
 

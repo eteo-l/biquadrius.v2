@@ -54,12 +54,20 @@ bool Player::hasOverride() const {
 }
 // **
 
-void Player::reset() {
+void Player::reset(bool first) {
     board.reset();
     score.resetCurrent();
-    current = level->createBlock();
-    next = level->createBlock();
     curR = 3; curC = 0;
+
+    // only create current block if it is player 1
+    if (first) {
+        current = level->createBlock();
+        next = level->createBlock();
+    } else {
+        current = nullptr;
+        next = level->createBlock();
+    }
+    
     droppedBlocks.clear();
     nextBlockId = 0;
     blocksDropped = 0;
@@ -115,8 +123,12 @@ void Player::moveLeft() {
 void Player::moveRight() {
     if (board.canMove(*current, curR, curC, 0, +1)) curC++;
 }
-void Player::moveDown() {
-    if (board.canMove(*current, curR, curC, +1, 0)) curR++;
+bool Player::moveDown() {
+    if (board.canMove(*current, curR, curC, +1, 0)) {
+        curR++;
+        return true;
+    }
+    return false;
 }
 
 
@@ -138,7 +150,6 @@ void Player::rotateCCW() {
 }
 
 int Player::drop() {
-    // NEW: (xinyu)
     while (board.canMove(*current, curR, curC, +1, 0)) {
         curR++;
     }
@@ -169,7 +180,6 @@ int Player::drop() {
     
 }
 
-// NEW xinyu Helper function
 void Player::updateClearedBlocksScoring() {
     const auto &ids = board.getBlockIdGrid();
     // mark which ids are still present
@@ -193,7 +203,6 @@ void Player::updateClearedBlocksScoring() {
     }
 }
 
-// NEW xinyu Helper function
 void Player::decrementAndExpireOldBlocks() {
     for (auto &db : droppedBlocks) {
         if (!db.alive) continue;
@@ -215,8 +224,6 @@ void Player::levelUp() {
     level = makeLevel(n);
 }
 
-
-// new Mike
 void Player::levelDown() {
     int n = level->getLevelNum();
     n--;
@@ -231,7 +238,6 @@ void Player::levelDown() {
         level = makeLevel(n);
     }
 }
-
 
 void Player::forceBlock(BlockType t) {
     current = makeBlock(t, level->getLevelNum());

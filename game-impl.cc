@@ -7,6 +7,9 @@ import Types;
 
 using namespace std;
 
+static Player *active = nullptr; // currently active player
+static bool blindPrint = false; // variable to know if blind version of board should be printed
+
 Game::Game(int startLevel, const std::vector<BlockType> *seq1, const std::vector<BlockType> *seq2): 
 p1{startLevel, seq1}, p2{startLevel, seq2}, td{&p1, &p2} 
 {
@@ -23,11 +26,6 @@ void Game::run() {
     cout << "Welcome to Biquadris!*⸜( •ᴗ• )⸝*" << endl;
     td.render();
 
-    bool blindPrint = false; //new lorena
-
-    //test
-    //applyEffects(0);
-
     while (getline(cin, line)) {
         auto temp = parser.parse(line);
         auto mult = temp.mult;
@@ -35,20 +33,36 @@ void Game::run() {
         auto forced = temp.forced;
         auto file = temp.file;
 
-        Player *active = (turn == 0 ? &p1 : &p2);
+        active = (turn == 0 ? &p1 : &p2);
 
         if (cmd == CommandType::EOFCommand) break;
+
+        // find if heavy effect is active for active player
+        HeavyEffect *heavyEffect = nullptr;
+        for (auto &eff : effects) {
+            if (auto *heavy = dynamic_cast<HeavyEffect*>(eff.get())) {
+                if (heavy->getOwner() == turn) {
+                    heavyEffect = heavy;
+                    break;
+                } 
+            }
+        }
 
         if (forced != 0) {
             active->forceBlock(charToBlockType(forced));
         } else {
             for (int k = 0; k < mult; ++k) {
-                if (cmd == CommandType::Left) {
+                if (cmd == CommandType::Drop) {
+                    drop();
+                } 
+                else if (cmd == CommandType::Left) {
                     active->moveLeft();
+                    checkHeavy(heavyEffect);
                 }
                 else if (cmd == CommandType::Right) {
                     // if heavy moveDown()
                     active->moveRight();
+                    checkHeavy(heavyEffect);
                 }
                 else if (cmd == CommandType::Down) {
                     // if heavy moveDown()
@@ -69,51 +83,8 @@ void Game::run() {
                     active->levelDown();
                 }
                 else if (cmd == CommandType::Restart) {
-                    p1.reset();
-                    p2.reset();
-                    turn = 0;
-                    td.render();
+                    resetGame();
                 }
-                else if (cmd == CommandType::Drop) {
-                    //new lorena
-                    // remove blind effect after drop
-                    for (size_t i = 0; i < effects.size(); ++i) {
-                        if (dynamic_cast<BlindEffect*>(effects[i].get())) {
-                            effects.erase(effects.begin() + i);  
-                            blindPrint = false;   
-                            break;
-                        }
-                    } 
-
-                    // active->drop();
-                    // new for player effect
-                    if (active->drop() >= 2) {
-                        int opponent = 1 - turn;
-                        applyEffects(opponent);
-                    }
-
-                    // apply forceeffect if exists and then deletes it
-                    for (size_t i = 0; i < effects.size(); ++i) {
-                        if (dynamic_cast<ForceEffect*>(effects[i].get())) {
-                            effects[i]->apply(p1, p2);
-                            effects.erase(effects.begin() + i);  
-                            break;
-                        }
-                    } 
-
-                    // dont call spawnNext() for the player whose turn starting
-                    // only the player who dropped should get a new block (alrady in player:;drop())
-                    // check if next players current block can be placed at their spawn
-                    // position; if not, the game is over.
-                    if (!active->getBoard().canPlace(active->getCurrentBlock(), active->getCurR(), active->getCurC())) {
-                        active->setCurR(-1); // cant place (by MY definition)
-                        gameOver = true;
-                    }
-
-                    // switch player turn after drop
-                    turn = 1 - turn;
-                    active = (turn == 0 ? &p1 : &p2);
-                } 
                 else if (cmd == CommandType::NoRandom) {
                     ifstream in{file};
                     vector<BlockType> seq;
@@ -144,22 +115,54 @@ void Game::run() {
         if (!blindPrint) {
             td.render();
         }
-        //new end
 
         if (gameOver) {
             cout << "Game Over! Player " << (1-turn) << " wins" << endl;
 
-            // restart game
-            p1.reset();
-            p2.reset();
-            turn = 0;
-            gameOver = false;
-            td.render();
+            resetGame();
         }
     }
 }
 
-// new lorena
+void Game::drop() {
+    // remove blind effect after drop
+    for (size_t i = 0; i < effects.size(); ++i) {
+        if (dynamic_cast<BlindEffect*>(effects[i].get())) {
+            effects.erase(effects.begin() + i);  
+            blindPrint = false;   
+            break;
+        }
+    } 
+
+    // new for player effect
+    if (active->drop() >= 2) {
+        int opponent = 1 - turn;
+        applyEffects(opponent);
+    }
+
+    // apply forceeffect if exists and then deletes it
+    for (size_t i = 0; i < effects.size(); ++i) {
+        if (dynamic_cast<ForceEffect*>(effects[i].get())) {
+            effects[i]->apply(p1, p2);
+            effects.erase(effects.begin() + i);  
+            break;
+        }
+    } 
+
+    // dont call spawnNext() for the player whose turn starting
+    // only the player who dropped should get a new block (alrady in player:;drop())
+    // check if next players current block can be placed at their spawn
+    // position; if not, the game is over.
+    if (!active->getBoard().canPlace(active->getCurrentBlock(), active->getCurR(), active->getCurC())) {
+        active->setCurR(-1); // cant place (by MY definition)
+        gameOver = true;
+    }
+
+    // switch player turn after drop
+    turn = 1 - turn;
+    active = (turn == 0 ? &p1 : &p2);
+}
+
 void Game::applyEffects(int opponent) {
     std::string action;
 
@@ -207,4 +210,23 @@ void Game::applyEffects(int opponent) {
         effects.push_back(std::make_unique<ForceEffect>(opponent, blockType));
         std::cout << "Force effect applied! Next block will be: " << blockType << endl;
     }
+}
+
+void Game::checkHeavy(HeavyEffect *heavyEffect) {
+    if (heavyEffect) {
+        heavyEffect->apply(p1, p2);
+        if (heavyEffect->getDropped()) {
+            heavyEffect->setDropped(false); // reset for next turn
+            drop();
+        }
+    }
+}
+
+void Game::resetGame() {
+    p1.reset(true);
+    p2.reset(false);
+    turn = 0;
+    gameOver = false;
+    td.render();
+    effects.clear();
 }

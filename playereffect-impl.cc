@@ -13,6 +13,10 @@ const int colsForNext = 4;
 
 PlayerEffect::PlayerEffect(int p) : owner{p} {}
 
+int PlayerEffect::getOwner() {
+    return owner;
+}
+
 BlindEffect::BlindEffect(int p) : PlayerEffect(p) {}
 
 void BlindEffect::apply(Player &p1, Player &p2) {
@@ -103,10 +107,28 @@ void BlindEffect::apply(Player &p1, Player &p2) {
 
 HeavyEffect::HeavyEffect(int p) : PlayerEffect(p) {}
 
-void HeavyEffect::apply(Player &p1, Player &p2) {
+bool HeavyEffect::getDropped() {
+    return dropped;
+}
+void HeavyEffect::setDropped(bool d) {
+    dropped = d;
 }
 
-ForceEffect::ForceEffect(int p, char f) : PlayerEffect(p), forcedType{f} {}
+void HeavyEffect::apply(Player &p1, Player &p2) {
+    if (owner == 0) {
+        p1.moveDown();
+        p1.moveDown();
+        // if cannot move down, block is considered dropped
+        dropped = !p1.getBoard().canMove(p1.getCurrentBlock(), p1.getCurR(), p1.getCurC(), +1, 0);
+    } else {
+        p2.moveDown();
+        p2.moveDown();
+        dropped = !p2.getBoard().canMove(p2.getCurrentBlock(), p2.getCurR(), p2.getCurC(), +1, 0);
+    }
+}
+
+ForceEffect::ForceEffect(int p, char f) : PlayerEffect(p), forcedType{f} {
+}
 
 void ForceEffect::apply(Player &p1, Player &p2) {
     if (owner == 0) {

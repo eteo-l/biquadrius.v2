@@ -22,5 +22,8 @@ public:
     // REMOVE NULLPTR???
     Game(int startLevel = 0, const std::vector<BlockType> *seq1 = nullptr, const std::vector<BlockType> *seq2 = nullptr);
     void run();
-    void applyEffects(int opponent); //new lorena
+    void drop(); // new
+    void applyEffects(int opponent);
+    void resetGame(); // new
+    void checkHeavy(HeavyEffect *heavyEffect); // new
 };
