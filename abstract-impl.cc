@@ -3,13 +3,6 @@ module Abstract;
 void Subject::attach(Observer *o) {
     observers.push_back(o);
 }
-// OLD
-// void Subject::detach(Observer *o) {
-//     observers.erase(
-//         std::remove(observers.begin(), observers.end(), o),
-//         observers.end()
-//     );
-// }
 
 // MIKE NEW
 void Subject::detach(Observer* o) {

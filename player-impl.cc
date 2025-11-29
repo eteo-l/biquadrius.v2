@@ -136,18 +136,6 @@ void Player::rotateCCW() {
 }
 
 int Player::drop() {
-    /*while (board.canMove(*current, curR, curC, +1, 0)) {
-        curR++;
-    }
-    board.place(*current, curR, curC);
-    int cleared = board.clearFullRows();
-    score.addLinesCleared(level->getLevelNum(), cleared);
-    // if (board.numBlocksCleared()) {
-    //     score.addBlockCleared();
-    // }
-    // block-cleared scoring later when you track block IDs
-    spawnNext();
-    return cleared;*/
     // NEW: (xinyu)
     while (board.canMove(*current, curR, curC, +1, 0)) {
         curR++;

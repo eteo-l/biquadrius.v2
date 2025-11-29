@@ -51,7 +51,7 @@ CommandInterpreter::theParse CommandInterpreter::parse(const std::string &line) 
     if (cmd.substr(0, levelUpPrefix.size()) == levelUpPrefix) return theParse{mult, CommandType::LevelUp, 0, ""};
     if (cmd.substr(0, levelDownPrefix.size()) == levelDownPrefix) return theParse{mult, CommandType::LevelDown, 0, ""};
     if (cmd.substr(0, restartPrefix.size()) == restartPrefix) return theParse{1, CommandType::Restart, 0, ""};
-    if (cmd.substr(0, norandomPrefix.size()) == norandomPrefix) {return theParse{1, CommandType::NoRandom, 0, cmd.substr(8)}; }// 8 chars in sequence
+    if (cmd.substr(0, norandomPrefix.size()) == norandomPrefix) {return theParse{1, CommandType::NoRandom, 0, cmd.substr(9)}; }// 8 chars in sequence
     if (cmd.substr(0, randomPrefix.size()) == randomPrefix) return theParse{1, CommandType::Random, 0, ""};
 
 

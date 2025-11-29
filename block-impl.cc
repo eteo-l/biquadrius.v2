@@ -10,12 +10,6 @@ char Block::getChar() const { return blockTypeToChar(type); }
 int Block::getLevelCreated() const { return levelCreated; }
 const std::vector<Point>& Block::getOffsets() const { return offsets; }
 
-// Mike
-// int Block::minimum(int x, int y) {
-//     if (x <= y) return x;
-//     return y;
-// }
-
 void Block::rotateCW() {
     // Save the old lower-left anchor
     int oldMaxR = getMaxRelRow();
