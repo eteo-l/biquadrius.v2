@@ -57,10 +57,12 @@ bool Player::hasOverride() const {
 void Player::reset() {
     board.reset();
     score.resetCurrent();
-    level = makeLevel(0);
     current = level->createBlock();
     next = level->createBlock();
     curR = 3; curC = 0;
+    droppedBlocks.clear();
+    nextBlockId = 0;
+    blocksDropped = 0;
 }
 
 const Board& Player::getBoard() const {

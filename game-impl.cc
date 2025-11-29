@@ -25,7 +25,10 @@ void Game::run() {
 
     bool blindPrint = false; //new lorena
 
-    while (!gameOver && getline(cin, line)) {
+    //test
+    //applyEffects(0);
+
+    while (getline(cin, line)) {
         auto temp = parser.parse(line);
         auto mult = temp.mult;
         auto cmd = temp.cmd;
@@ -69,6 +72,7 @@ void Game::run() {
                     p1.reset();
                     p2.reset();
                     turn = 0;
+                    td.render();
                 }
                 else if (cmd == CommandType::Drop) {
                     //new lorena
@@ -84,7 +88,8 @@ void Game::run() {
                     // active->drop();
                     // new for player effect
                     if (active->drop() >= 2) {
-                        applyEffects(1 - turn);
+                        int opponent = 1 - turn;
+                        applyEffects(opponent);
                     }
 
                     // apply forceeffect if exists and then deletes it
@@ -121,10 +126,6 @@ void Game::run() {
                 else if (cmd == CommandType::Random) {
                     active->clearOverride();
                 }
-                else {
-                    // nothing i guess
-                }
-
             }
         }
 
@@ -147,6 +148,13 @@ void Game::run() {
 
         if (gameOver) {
             cout << "Game Over! Player " << (1-turn) << " wins" << endl;
+
+            // restart game
+            p1.reset();
+            p2.reset();
+            turn = 0;
+            gameOver = false;
+            td.render();
         }
     }
 }
@@ -178,24 +186,21 @@ void Game::applyEffects(int opponent) {
     else if (action.starts_with("force")) {
         // Prompt for block type until valid
         char blockType;
-        std::string block;
+        char block = '\0';
+        if (action.length() == 7) {
+            block = action[6]; // extract after "force "
+        }
         while (true) {
-            if (action.length() < 7) {
-                std::cout << "Enter block type (I, J, L, O, S, T, Z): ";
-                if (!std::getline(std::cin, block)) continue; // bad input → retry
-                if (block.size() != 1) {
-                    std::cout << "Please enter exactly one character." << endl; 
-                    continue;
-                }
-            } else {
-                std::string block = action.substr(6); // extract after "force "
-            }
-            blockType = std::toupper(block[0]);
+            blockType = std::toupper(block);
             if (blockType=='I' || blockType=='J' || blockType=='L' ||
                 blockType=='O' || blockType=='S' || blockType=='T' ||
                 blockType=='Z') break;
 
-            std::cout << "Invalid block type. Try again." << endl;
+            std::cout << "Invalid block type. Enter block type (I, J, L, O, S, T, Z): " << endl;
+            while (!(std::cin >> block)) {
+                std::cin.clear(); 
+                std::cin.ignore(10000,'\n');
+            }
         }
 
         // Apply ForceEffect to the opponent
